@@ -1,0 +1,18 @@
+# Virtual environments
+venv_3.9/
+venv/
+env/
+.env/
+ENV/
+
+# Python cache and build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
