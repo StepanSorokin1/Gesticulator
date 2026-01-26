@@ -1,6 +1,6 @@
 import cv2
-import time
 from camera import Camera
+from timer import Timer
 from hand_tracker import HandTracker
 from gesture_tracker import GestureDetector
 from gesture_controller import GestureController
@@ -11,10 +11,8 @@ def main():
     tracker = HandTracker()
     detector = GestureDetector()
     controller = GestureController()
-    
-    fps_time = time.time()
-    frame_count = 0
-    
+    timer = Timer()
+    show_FPS = False
     try:
         while True:
             # Получаем кадр с камеры
@@ -36,21 +34,23 @@ def main():
                 # Показываем жест на экране
                 cv2.putText(frame, f"Gesture: {gesture}", (10, 30),
                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                
+                # Завершение программы 
+                if gesture == "STOP":
+                    break
+
+            # Вывод FPS при необходимости
+            if cv2.waitKey(1) == ord('t'):
+                show_FPS = not(show_FPS)
             
-            # Считаем FPS
-            frame_count += 1
-            if time.time() - fps_time > 1:
-                fps = frame_count
-                frame_count = 0
-                fps_time = time.time()
-                print(f"FPS: {fps}")
+            if show_FPS:
+                cv2.putText(frame, f"FPS: {timer.FPS_counter()}", (480, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                
             
             # Показываем изображение
             cv2.imshow("Gesture Control", frame)
             
-            # Выход по клавише 'q'
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            
     
     finally:
         # Очистка ресурсов

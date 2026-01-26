@@ -45,4 +45,7 @@ class GestureDetector:
         if fingers['index'] and fingers['middle'] and not fingers['ring'] and not fingers['pinky']:
             return "VICTORY"
         
+        if not fingers['thumb'] and all([fingers['index'], fingers['middle'], fingers['ring'], fingers['pinky']]):
+            return "STOP"
+        
         return "UNKNOWN"

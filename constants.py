@@ -9,6 +9,8 @@ MEDIAPIPE_CONFIG = {
     'min_tracking_confidence': 0.5
 }
 
+INTERVAL = 0.25
+
 # Настройки мыши
 MOUSE_SMOOTHING = 0.3  # Сглаживание движений
 SCREEN_WIDTH = 1920    # Размер экрана
