@@ -1,4 +1,5 @@
 import cv2
+from constants import CAMERA_WIDTH, CAMERA_HEIGHT
 from camera import Camera
 from timer import Timer
 from hand_tracker import HandTracker
@@ -12,7 +13,7 @@ def main():
     detector = GestureDetector()
     controller = GestureController()
     timer = Timer()
-    show_FPS = False
+    show_fps = False
     try:
         while True:
             # Получаем кадр с камеры
@@ -25,7 +26,7 @@ def main():
             
             if landmarks and handedness:
                 # Определяем жесты
-                fingers = detector.get_fingers_up(landmarks, handedness)
+                fingers = detector.get_fingers(landmarks, handedness)
                 gesture = detector.detect_gesture(fingers)
                 
                 # Управление мышью
@@ -41,15 +42,19 @@ def main():
 
             # Вывод FPS при необходимости
             if cv2.waitKey(1) == ord('t'):
-                show_FPS = not(show_FPS)
+                show_fps = not(show_fps)
             
-            if show_FPS:
-                cv2.putText(frame, f"FPS: {timer.FPS_counter()}", (480, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            if show_fps:
+                cv2.putText(frame, f"FPS: {timer.fps_counter()}", (CAMERA_WIDTH - 160, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
             
             # Показываем изображение
             cv2.imshow("Gesture Control", frame)
-            
+
+    except Exception as e:
+        print(f"Непредвиденная ошибка: {e}")
+    else:
+        print("Успешное завершение программы")  
             
     
     finally:

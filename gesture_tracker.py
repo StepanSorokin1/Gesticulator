@@ -1,8 +1,8 @@
-from constants import *
+from constants import palm_side
 
 class GestureDetector:
     @staticmethod
-    def get_fingers_up(landmarks, handedness):
+    def get_fingers(landmarks, handedness):
         """Определяет, какие пальцы подняты"""
         fingers = {
             'thumb': False,
@@ -11,37 +11,44 @@ class GestureDetector:
             'ring': False,
             'pinky': False
         }
+        if handedness == "Right":
+            if landmarks[5].x < landmarks[17].x:
+                palm_side = "Inner"
+            else:
+                palm_side = "Outside"
+        elif handedness == "Left":
+            if landmarks[5].x > landmarks[17].x:
+                palm_side = "Inner"
+            else:
+                palm_side = "Outside"
         
-        # Простая логика: палец поднят, если его кончик выше сустава
-        fingers['index'] = landmarks[INDEX_TIP].y < landmarks[INDEX_TIP-2].y
-        fingers['middle'] = landmarks[MIDDLE_TIP].y < landmarks[MIDDLE_TIP-2].y
-        fingers['ring'] = landmarks[RING_TIP].y < landmarks[RING_TIP-2].y
-        fingers['pinky'] = landmarks[PINKY_TIP].y < landmarks[PINKY_TIP-2].y
+        fingers['index'] = landmarks[8].y < landmarks[6].y
+        fingers['middle'] = landmarks[12].y < landmarks[10].y
+        fingers['ring'] = landmarks[16].y < landmarks[14].y
+        fingers['pinky'] = landmarks[20].y < landmarks[18].y
         
         # Большой палец - отдельная логика
         if handedness == "Right":
-            fingers['thumb'] = landmarks[THUMB_TIP].x > landmarks[THUMB_TIP-1].x
+            if palm_side == "Inner":
+                fingers['thumb'] = landmarks[4].x < landmarks[5].x
+            else:
+                fingers['thumb'] = landmarks[4].x > landmarks[5].x
         else:
-            fingers['thumb'] = landmarks[THUMB_TIP].x < landmarks[THUMB_TIP-1].x
-        
+            if palm_side == "Inner":
+                fingers['thumb'] = landmarks[4].x > landmarks[5].x
+            else:
+                fingers['thumb'] = landmarks[4].x < landmarks[5].x
         return fingers
     
     @staticmethod
     def detect_gesture(fingers):
         """Определяет жест по положению пальцев"""
-        # Указательный палец поднят, остальные опущены
         if fingers['index'] and not any([fingers['middle'], fingers['ring'], fingers['pinky']]):
             return "POINT"
         
-        # Все пальцы подняты
-        if all(fingers.values()):
-            return "OPEN_HAND"
+        if fingers['index'] and not fingers['middle'] and not fingers['ring'] and fingers['pinky']:
+            return "ROCK"
         
-        # Все пальцы опущены
-        if not any(fingers.values()):
-            return "FIST"
-        
-        # Указательный и средний подняты (жест "V")
         if fingers['index'] and fingers['middle'] and not fingers['ring'] and not fingers['pinky']:
             return "VICTORY"
         

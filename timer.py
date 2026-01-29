@@ -7,7 +7,7 @@ class Timer():
         self.next_time = 0
         self.prev_time = 0
         self.FPS = 0
-    def FPS_counter(self):
+    def fps_counter(self):
         self.frame_counter += 1
         self.next_time = time()
         if self.next_time - self.prev_time >= INTERVAL:
