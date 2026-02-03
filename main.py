@@ -1,7 +1,7 @@
 import cv2
-from constants import CAMERA_WIDTH, CAMERA_HEIGHT
+from constants import CAMERA_WIDTH, CAMERA_HEIGHT, INTERVAL
 from camera import Camera
-from timer import Timer
+from time import time
 from hand_tracker import HandTracker
 from gesture_tracker import GestureDetector
 from gesture_controller import GestureController
@@ -12,7 +12,6 @@ def main():
     tracker = HandTracker()
     detector = GestureDetector()
     controller = GestureController()
-    timer = Timer()
     show_fps = False
     try:
         while True:
@@ -42,10 +41,19 @@ def main():
 
             # Вывод FPS при необходимости
             if cv2.waitKey(1) == ord('t'):
+                frame_counter = 0
+                next_time = 0
+                prev_time = 0
                 show_fps = not(show_fps)
             
             if show_fps:
-                cv2.putText(frame, f"FPS: {timer.fps_counter()}", (CAMERA_WIDTH - 160, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                frame_counter += 1
+                next_time = time()
+                if next_time - prev_time >= INTERVAL:
+                    fps = frame_counter // (next_time - prev_time)
+                    prev_time = next_time
+                    frame_counter = 0
+                cv2.putText(frame, f"FPS: {fps}", (CAMERA_WIDTH - 160, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
             
             # Показываем изображение
