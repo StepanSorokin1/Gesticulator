@@ -31,7 +31,7 @@ def main():
                 # Управление мышью
                 controller.handle_gesture(gesture, landmarks, handedness)
                 
-                # Показываем жест на экране
+                # Показываем жест на экране 
                 cv2.putText(frame, f"Gesture: {gesture}", (10, 30),
                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 

@@ -19,3 +19,4 @@ build/
 
 # Specific objects
 old_project/
+test.py
