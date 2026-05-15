@@ -21,12 +21,12 @@ class MouseController:
         pyautogui.moveTo(smooth_x, smooth_y)
         self.prev_x, self.prev_y = smooth_x, smooth_y
     
-    def click(self):
-        pyautogui.click()
+    def left_click(self):
+        pyautogui.click(interval=0.5)
     
     def double_click(self):
-        pyautogui.doubleClick()
+        pyautogui.doubleClick(interval=0.5)
     
     def right_click(self):
-        pyautogui.rightClick()
+        pyautogui.rightClick(interval=0.5)
 

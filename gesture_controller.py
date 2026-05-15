@@ -1,6 +1,7 @@
 from mouse import MouseController
 from gesture_tracker import GestureDetector
 from threading import Thread
+
 class GestureController:
     def __init__(self):
         self.mouse = MouseController()
@@ -13,7 +14,7 @@ class GestureController:
             thread.start()
 
         elif gesture == "VICTORY":
-            self.mouse.click()
+            self.mouse.left_click()
         
         elif gesture == "ROCK":
             self.mouse.right_click()

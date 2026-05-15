@@ -55,7 +55,6 @@ def main():
                     frame_counter = 0
                 cv2.putText(frame, f"FPS: {fps}", (CAMERA_WIDTH - 160, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 
-            
             # Показываем изображение
             cv2.imshow("Gesture Control", frame)
 
