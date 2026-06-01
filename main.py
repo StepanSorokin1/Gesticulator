@@ -8,20 +8,29 @@ from gesture_controller import GestureController
 
 def main():
     # Инициализация всех компонентов
+    show_fps = False
+    draw_palms = False
+    timestamp = 0
+
     camera = Camera()
     tracker = HandTracker()
     detector = GestureDetector()
     controller = GestureController()
-    show_fps = False
+    
     try:
         while True:
             # Получаем кадр с камеры
             frame = camera.get_frame()
             if frame is None:
                 break
-            
+
+            timestamp += 1
             # Определяем руку
-            landmarks, handedness = tracker.process(frame)
+            tracker.process_async(frame, timestamp)
+            landmarks, handedness = tracker.get_latest_results()
+
+            if draw_palms and landmarks:
+                HandTracker.draw_landmarks(frame, landmarks)
             
             if landmarks and handedness:
                 # Определяем жесты
@@ -39,8 +48,9 @@ def main():
                 if gesture == "STOP":
                     break
 
+            key = cv2.waitKey(1)
             # Вывод FPS при необходимости
-            if cv2.waitKey(1) == ord('t'):
+            if key == ord('t'):
                 frame_counter = 0
                 next_time = 0
                 prev_time = 0
@@ -54,6 +64,12 @@ def main():
                     prev_time = next_time
                     frame_counter = 0
                 cv2.putText(frame, f"FPS: {fps}", (CAMERA_WIDTH - 160, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            
+            # Отображение контрольных точек при необходимости
+            if key == ord('d'):
+                draw_palms = not(draw_palms)
+                tracker.draw_landmarks = draw_palms
+
                 
             # Показываем изображение
             cv2.imshow("Gesture Control", frame)

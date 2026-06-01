@@ -1,5 +1,5 @@
 # Virtual environments
-venv_3.9/
+venv_3.13/
 venv/
 env/
 .env/
@@ -18,5 +18,5 @@ dist/
 build/
 
 # Specific objects
-old_project/
+images/
 test.py
