@@ -18,5 +18,4 @@ dist/
 build/
 
 # Specific objects
-images/
 test.py
